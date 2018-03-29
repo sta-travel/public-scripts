@@ -1,0 +1,9 @@
+master: salt-master.bluee.net
+hash_type: sha256
+grains:
+ customer_code: STA
+ environment: alpha
+ profile: develop1-deployment-profile
+ tdp-components:
+  - tdp4app
+  - guicomms  
