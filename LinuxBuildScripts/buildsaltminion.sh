@@ -10,16 +10,15 @@ TemplateName=$1
 ProfileName=$2
 EnvironmentName=$3
 HostName=`hostname`
-HostNameLong=`hostname -fqdn`
 
 #
 wget https://raw.githubusercontent.com/sta-travel/public-scripts/master/SaltConfigurations/$TemplateName-template  -O minion
 
-sed -i -e "s/<ProfileName>/$ProfileName" minion
-sed -i -e "s/<EnvironmentName>/$EnvironmentName" minion
+sed -i -e "s/<ProfileName>/$ProfileName/g" minion
+sed -i -e "s/<EnvironmentName>/$EnvironmentName/g" minion
 
 sudo cp minion /etc/salt/minion 
 $HostName > /etc/salt/minion_id 
-echo "127.0.0.1 $HostName $HostNameLong" >> /etc/hosts
+echo "127.0.0.1 $HostName >> /etc/hosts
 
 service salt-minion restart
