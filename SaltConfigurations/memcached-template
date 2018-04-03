@@ -1,0 +1,8 @@
+master: salt-master.bluee.net
+hash_type: sha256
+grains:
+ customer_code: STA
+ environment: <EnvironmentName>
+ profile: <ProfileName>
+ tdp-components:
+  - memcached
