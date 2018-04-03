@@ -19,6 +19,6 @@ sed -i -e "s/<EnvironmentName>/$EnvironmentName/g" minion
 
 sudo cp minion /etc/salt/minion 
 $HostName > /etc/salt/minion_id 
-echo "127.0.0.1 $HostName >> /etc/hosts
+echo "127.0.0.1 $HostName" >> /etc/hosts
 
 service salt-minion restart
