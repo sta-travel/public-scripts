@@ -43,10 +43,10 @@ service salt-minion restart
 
 case $FirewallProfile in
   tdpapp)
-  firewall-cmd --zone=public --add-ports=8080/tcp --permanent
-  firewall-cmd --zone=public --add-ports=9090/tcp --permanent
-  firewall-cmd --zone=public --add-ports=6702/tcp --permanent
-  firewall-cmd --zone=public --add-ports=6601/tcp --permanent
+  firewall-cmd --zone=public --add-port=8080/tcp --permanent
+  firewall-cmd --zone=public --add-port=9090/tcp --permanent
+  firewall-cmd --zone=public --add-port=6702/tcp --permanent
+  firewall-cmd --zone=public --add-port=6601/tcp --permanent
   firewall-cmd --reload
   ;;
   uiserver)
