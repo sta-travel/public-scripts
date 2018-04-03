@@ -10,6 +10,7 @@
 TemplateName=$1
 ProfileName=$2
 EnvironmentName=$3
+FirewallProfile=$1
 HostName=`hostname`
 
 # Download the correct template from github and name it minion for ease of access
@@ -36,5 +37,27 @@ yum update -y
 # Restart the salt service
 service salt-minion restart
 
+# Firewall configuration
+# create a case for the various firewall configurations for centos 7 servers, webapp server
+# tdp app server, mui server, memcached server, etc
+
+case $FirewallProfile in
+  tdpapp)
+  firewall-cmd --zone=public --add-ports=8080/tcp --permanent
+  firewall-cmd --zone=public --add-ports=9090/tcp --permanent
+  firewall-cmd --zone=public --add-ports=6702/tcp --permanent
+  firewall-cmd --zone=public --add-ports=6601/tcp --permanent
+  firewall-cmd --reload
+  ;;
+  uiserver)
+  ;;
+  *)
+  echo "no firewall config"
+  ;;
+esac
+
 # Call the salt state
 salt-call state.highstate
+
+# exit gracefully
+exit 0
