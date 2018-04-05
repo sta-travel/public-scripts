@@ -1,0 +1,42 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "uksouth"
+        },
+        "virtualMachineNameSuffix": {
+            "value": "linkedtest-serv002"
+        },
+        "virtualMachineSize": {
+            "value": "Standard_A1_v2"
+        },
+        "adminUsername": {
+            "value": "eagle"
+        },
+        "virtualNetworkName": {
+            "value": "STAAzureUKSouthNet"
+        },
+        "networkInterfaceNameSuffix": {
+            "value": "testserver475"
+        },
+        "networkSecurityGroupName": {
+            "value": "STAAZNonProdAppSub-nsg"
+        },
+        "networkSecurityGroupResourceGroup": {
+            "value": "STAAZNonProdAppSub"
+        }, 
+        "adminPublicKey": {
+            "value": "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEApVm7Egv6fFZwXSgQPmpdQCrg1mr9plUthhFmBtPYpIxXH0j4yarpXNmddyi8MvwpXFR/756KfmHcRyUnV9580ijB6W+qCeVQTMJ98zfEAa+LrTXcsMKeNDCxBod4zxz33Um19Z5gaROP1DbqioLTpvFQTr8m7gL6uG5KbOGbRMBDNalhBWDEU+4Ibwc2v8DmlLdDR7pSd0Qy5S/hflr+NhFXRJb6TzfuDtZDOCvIqmcDtKR6O/WV/D1Pfdeso2vQgYKDjcIVoQXcCRO8ybOfCC5srWr+54vcryq/tMkJTWBtk70bcdQMv7czzhF6rPcSXxDwbeiZv+tR3L86iyDU6w=="
+        },
+        "centosImageName": {
+            "value": "STACentos7Hardened5"
+        },
+        "imageResourceGroup":{
+            "value": "tame-dingo"
+        },
+        "subnetName": {
+            "value": "subnet2"
+        }
+    }
+}

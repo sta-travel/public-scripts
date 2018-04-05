@@ -1,0 +1,162 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string"
+        },
+        "virtualMachineNameSuffix": {
+            "type": "string"
+        },
+        "virtualMachineSize": {
+            "type": "string"
+        },
+        "adminUsername": {
+            "type": "string"
+        },
+        "virtualNetworkName": {
+            "type": "string"
+        },
+        "networkInterfaceNameSuffix": {
+            "type": "string"
+        },
+        "networkSecurityGroupName": {
+            "type": "string"
+        },
+        "networkSecurityGroupResourceGroup": {
+            "type": "string"
+        }, 
+        "adminPublicKey": {
+            "type": "string"
+        },
+        "subnetName": {
+            "type": "string"
+        },
+        "imageResourceGroup":{
+            "type": "string"
+        },
+        "centosImageName": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "vnetId": "[resourceId('BadgerEdgeNW','Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+        "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
+        "randomPrefix": "[toLower(uniqueString(resourceGroup().id))]",
+        "networkInterfaceName" : "[concat(variables('randomPrefix'), '-ni-' ,parameters('virtualMachineNameSuffix'))]",
+        "virtualMachineName" : "[concat(variables('randomPrefix'), '-' ,parameters('virtualMachineNameSuffix'))]", 
+        "centosImageID" : "[resourceId(parameters('imageResourceGroup'), 'Microsoft.Compute/images', parameters('centosImageName'))]"
+    },
+    "resources": [
+        {
+            "name": "[variables('virtualMachineName')]",
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2016-04-30-preview",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkInterfaces/', variables('networkInterfaceName'))]"
+            ],
+            "properties": {
+                "osProfile": {
+                    "computerName": "[variables('virtualMachineName')]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": "true",
+                        "ssh": {
+                            "publicKeys": [
+                                {
+                                    "path": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
+                                    "keyData": "[parameters('adminPublicKey')]"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "hardwareProfile": {
+                    "vmSize": "[parameters('virtualMachineSize')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "id": "[variables('centosImageID')]"
+                    },
+                    "osDisk": {
+                        "createOption": "fromImage",
+                        "managedDisk": {
+                            "storageAccountType": "Standard_LRS"
+                        }
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]"
+                        }
+                    ]
+                }
+            },
+            "resources": [
+                {
+                    "type": "extensions",
+                    "name": "CustomScriptExtension",
+                    "apiVersion": "2016-04-30-preview",
+                    "location": "[parameters('location')]",
+                    "dependsOn": [
+                        "[variables('virtualMachineName')]"
+                    ],
+                    "properties": {
+                        "publisher": "Microsoft.OSTCExtensions",
+                        "type": "CustomScriptForLinux",
+                        "typeHandlerVersion": "1.5",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "fileUris" : [
+                                "https://raw.githubusercontent.com/sta-travel/public-scripts/master/TestAzureLinuxScripts/testBuildScript.sh"
+                            ],
+                            "commandToExecute": "/bin/bash ./testBuildScript.sh"
+                            }
+                        }
+                    } 
+            ]
+        },
+        {
+            "name": "[variables('networkInterfaceName')]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2016-09-01",
+            "location": "[parameters('location')]",
+            "dependsOn": [],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "subnet": {
+                                "id": "[variables('subnetRef')]"
+                            },
+                            "privateIPAllocationMethod": "Dynamic"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": [
+                        "10.37.1.5",
+                        "10.5.1.40"
+                    ],
+                    "appliedDnsServers": [
+                        "10.37.1.5",
+                        "10.5.1.40"
+                    ],
+                    "internalDomainNameSuffix": "wijzimq5vndenpgsybpx4npj3b.zx.internal.cloudapp.net"
+                },
+                "networkSecurityGroup": {
+                    "id": "[resourceId(parameters('networkSecurityGroupResourceGroup'),'Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
+                }
+            }                        
+        }               
+    ],
+    "outputs": {
+        "adminUsername": {
+            "type": "string",
+            "value": "[parameters('adminUsername')]"
+        }
+    }
+}
