@@ -103,28 +103,7 @@
                     ]
                 }
             },
-            "resources": [
-                {
-                    "type": "extensions",
-                    "name": "CustomScriptExtension",
-                    "apiVersion": "2016-04-30-preview",
-                    "location": "[parameters('location')]",
-                    "dependsOn": [
-                        "[variables('virtualMachineName')]"
-                    ],
-                    "properties": {
-                        "publisher": "Microsoft.OSTCExtensions",
-                        "type": "CustomScriptForLinux",
-                        "typeHandlerVersion": "1.5",
-                        "autoUpgradeMinorVersion": true,
-                        "settings": {
-                            "fileUris" : [
-                                "https://raw.githubusercontent.com/sta-travel/public-scripts/master/LinuxBuildScripts/basicconfig.sh"
-                            ],
-                            "commandToExecute": "/bin/bash ./basicconfig.sh"
-                            }
-                    }
-                },
+            "resources": [                
                 {
                     "type": "extensions",
                     "name": "OMSExtension",
