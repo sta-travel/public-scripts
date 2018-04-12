@@ -141,7 +141,7 @@
                         "workspaceId": "[variables('workspaceResourceId').customerId]"
                       },
                       "protectedSettings": {
-                        "workspaceKey": "[listKeys(variables('workspaceResourceId', '2015-11-01-preview').primarySharedKey]"
+                        "workspaceKey": "[listKeys(variables('workspaceResourceId', '2015-11-01-preview')).primarySharedKey]"
                       }
                     }
                   }                             
