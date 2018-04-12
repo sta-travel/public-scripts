@@ -138,7 +138,7 @@
                       "type": "OmsAgentForLinux",
                       "typeHandlerVersion": "1.4",
                       "settings": {
-                        "workspaceId": "[variables('workspaceResourceId']"
+                        "workspaceId": "[variables('workspaceResourceId').customerId]"
                       },
                       "protectedSettings": {
                         "workspaceKey": "[listKeys(variables('workspaceResourceId', '2015-11-01-preview').primarySharedKey]"
