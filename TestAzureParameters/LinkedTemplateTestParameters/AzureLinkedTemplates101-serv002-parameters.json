@@ -38,8 +38,11 @@
         "subnetName": {
             "value": "subnet2"
         },
-        "WorkSpaceID":{
-            "value": "6a59238b-f062-4c46-93e1-3fbbae02150d"
+        "WorkSpaceName":{
+            "value": "templating-oms-test"
+        },
+        "WorkSpaceResourceGroup":{
+            "value": "templating-oms-test"
         }
     }
 }

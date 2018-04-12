@@ -38,8 +38,13 @@
         "centosImageName": {
             "type": "string"
         },
-        "WorkSpaceID": {
-            "type": "string"
+        "WorkSpaceName": {
+            "type": "string",
+            "defaultValue": "templating-oms-test"
+        },
+        "WorkSpaceResourceGroup": {
+            "type": "string",
+            "defaultValue": "templating-oms-test"
         }
     },
     "variables": {
@@ -48,7 +53,8 @@
         "randomPrefix": "[toLower(uniqueString(resourceGroup().id))]",
         "networkInterfaceName" : "[concat(variables('randomPrefix'), '-ni-' ,parameters('virtualMachineNameSuffix'))]",
         "virtualMachineName" : "[concat(variables('randomPrefix'), '-' ,parameters('virtualMachineNameSuffix'))]", 
-        "centosImageID" : "[resourceId(parameters('imageResourceGroup'), 'Microsoft.Compute/images', parameters('centosImageName'))]"
+        "centosImageID" : "[resourceId(parameters('imageResourceGroup'), 'Microsoft.Compute/images', parameters('centosImageName'))]",
+        "workspaceResourceId" : "[resourceId(parameters('WorkSpaceResourceGroup'), 'Microsoft.OperationalInsights/workspaces/', parameters('WorkSpaceName'))]"
     },
     "resources": [
         {
@@ -132,10 +138,10 @@
                       "type": "OmsAgentForLinux",
                       "typeHandlerVersion": "1.4",
                       "settings": {
-                        "workspaceId": "[parameters('WorkSpaceID')]"
+                        "workspaceId": "[variables('workspaceResourceId']"
                       },
                       "protectedSettings": {
-                        "workspaceKey": "[listKeys(parameters('WorkSpaceID'), '2015-11-01-preview').primarySharedKey]"
+                        "workspaceKey": "[listKeys(variables('workspaceResourceId', '2015-11-01-preview').primarySharedKey]"
                       }
                     }
                   }                             

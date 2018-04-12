@@ -1,0 +1,24 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {        
+        "WorkSpaceName": {
+            "type": "string",
+            "defaultValue": "templating-oms-test"
+        },
+        "WorkSpaceResourceGroup": {
+            "type": "string",
+            "defaultValue": "templating-oms-test"
+        }
+    },
+    "variables": {        
+        "workspaceResourceId" : "[resourceId(parameters('WorkSpaceResourceGroup'), 'Microsoft.OperationalInsights/workspaces/', parameters('WorkSpaceName'))]"
+    },
+    "resources": [ ],
+    "outputs": {
+        "listKeys": {
+            "value": "[listKeys(variables('workspaceResourceId'), '2015-11-01-preview')]",
+            "type": "object"
+        }
+    }
+}
