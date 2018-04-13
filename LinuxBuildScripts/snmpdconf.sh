@@ -3,8 +3,8 @@
 yum install -y net-snmp-utils net-snmp
 cd /etc/snmp
 mv snmpd.conf snmpd.conf.orig
-wget {github url for snmpd.conf}
+wget https://github.com/sta-travel/public-scripts/blob/master/LinuxBuildScripts/snmpd.conf
 cd /etc/firewalld/services
-wget {github snmp.xml}
+wget https://github.com/sta-travel/public-scripts/blob/master/LinuxBuildScripts/snmp.xml
 firewall-cmd --zone=public --add-service snmp --permanent
 firewall-cmd --reload
