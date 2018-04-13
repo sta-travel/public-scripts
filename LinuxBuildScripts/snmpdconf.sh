@@ -1,5 +1,5 @@
 #!/bin/bash
-# Install and Configure snmpd on Centos 7 to enable monitoring by Solarwinds
+# Install and Configure snmpd and firewall on Centos 7 to enable monitoring by Solarwinds
 yum install -y net-snmp-utils net-snmp
 cd /etc/snmp
 mv snmpd.conf snmpd.conf.orig
