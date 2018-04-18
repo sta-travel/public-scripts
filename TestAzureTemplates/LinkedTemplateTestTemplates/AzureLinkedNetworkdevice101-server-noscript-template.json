@@ -60,8 +60,9 @@
     "variables": {
         "vnetId": "[resourceId('BadgerEdgeNW','Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
-        "randomPrefix": "[toLower(uniqueString(resourceGroup().id))]",
+        "randomPrefix": "[toLower(uniqueString(resourceGroup().id))]",        
         "networkInterfaceName" : "[concat(variables('randomPrefix'), '-ni-' ,parameters('virtualMachineNameSuffix'))]",
+        "NetworkTemplateDeploymentName": "[concat(variables('networkInterfaceName'), '-NetworkTemplate')]",
         "virtualMachineName" : "[concat(variables('randomPrefix'), '-' ,parameters('virtualMachineNameSuffix'))]", 
         "centosImageID" : "[resourceId(parameters('imageResourceGroup'), 'Microsoft.Compute/images', parameters('centosImageName'))]",
         "workspaceResourceId" : "[resourceId(parameters('WorkSpaceResourceGroup'), 'Microsoft.OperationalInsights/workspaces/', parameters('WorkSpaceName'))]"
@@ -73,7 +74,7 @@
             "apiVersion": "2016-04-30-preview",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "NetworkTemplate"
+                "[variables('NetworkTemplateDeploymentName')]"
             ],
             "properties": {
                 "osProfile": {
@@ -138,7 +139,7 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "NetworkTemplate",
+            "name": "[variables('NetworkTemplateDeploymentName')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode":"Incremental",
