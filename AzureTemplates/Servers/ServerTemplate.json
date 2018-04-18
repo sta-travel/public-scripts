@@ -5,7 +5,7 @@
         "location": {
             "type": "string"
         },
-        "environment":{
+        "environment": {
             "type": "string"
         },
         "virtualMachineNameSuffix": {
@@ -57,6 +57,12 @@
             "type": "string"
         },
         "IPAllocationMethod":{
+            "type": "string"
+        },
+        "scriptName":{
+            "type": "string"
+        },
+        "scriptParameters":{
             "type": "string"
         }
     },
@@ -136,7 +142,7 @@
                             "fileUris" : [
                                 "[concat(variables('gitHubRoot'), '/LinuxBuildScripts/' ,parameters('scriptName'))]"
                             ],
-                            "commandToExecute": "[concat('/bin/bash ',  '.', parameters('scriptName'), ' ', parameters('scriptParameters'))]"
+                            "commandToExecute": "[concat('/bin/bash ',  './', parameters('scriptName'), ' ', parameters('scriptParameters'))]"
                             }
                     }
                 },
