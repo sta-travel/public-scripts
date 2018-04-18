@@ -50,7 +50,7 @@
                 "displayName": "parameters('NICName')"
             },
             "dependsOn": [
-                "[concat('Microsoft.Network/publicIPAddresses/', variables('NICName'),'-pip')]"
+                "[concat('Microsoft.Network/publicIPAddresses/', parameters('NICName'),'-pip')]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -62,7 +62,7 @@
                                 "id": "[parameters('subnetRef')]"
                             },
                             "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',Concat(variables('NICName'),'-pip'))]"
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',Concat(parameters('NICName'),'-pip'))]"
                             }
                         }
                     }
