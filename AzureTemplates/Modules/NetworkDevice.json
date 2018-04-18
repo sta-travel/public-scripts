@@ -1,0 +1,103 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "NetworkInterfaceType": {
+            "type": "string"
+        },
+        "NICName": {
+            "type": "string"
+        },
+        "IPAllocationMethod": {
+            "type": "string"
+        },
+        "subnetRef":{
+            "type": "string"
+        },
+        "NSGResourceGroup":{
+            "type": "string"
+        },
+        "NSGName":{
+            "type": "string"
+        }
+
+
+    },
+    "resources": [
+        {
+            "apiVersion": "2017-06-01",
+            "condition": "[equals(parameters('NetworkInterfaceType'),'Public')]",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[Concat(variables('NICName'),'-pip')]",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                    "displayName": "[Concat(variables('NICName'),'-pip')]"
+                },
+            "properties": {
+                "publicIPAllocationMethod": "[parameters('IPAllocationMethod')]",
+                "dnsSettings": {
+                    "domainNameLabel": "[Concat(variables('NICName'),'-pip')]"
+                } 
+            }
+        },
+        {
+            "apiVersion": "2017-06-01",
+            "condition": "[equals(parameters('NetworkInterfaceType'),'Public')]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[concat(variables('NICName'),'-public')]",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "parameters('NICName')"
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Network/publicIPAddresses/', variables('NICName'),'-pip')]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "[parameters('IPAllocationMethod')]",
+                            "subnet": {
+                                "id": "[parameters('subnetRef')]"
+                            },
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',Concat(variables('NICName'),'-pip'))]"
+                            }
+                        }
+                    }
+                ],
+                "networkSecurityGroup": {
+                    "id": "[resourceId(parameters('NSGResourceGroup'),'Microsoft.Network/networkSecurityGroups', parameters('NSGName'))]"
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-06-01",
+            "condition": "[equals(parameters('NetworkInterfaceType'),'Private')]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[concat(variables('NICName'),'-private')]",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "parameters('NICName')"
+            },
+            "dependsOn": [],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "[parameters('IPAllocationMethod')]",
+                            "subnet": {
+                                "id": "[parameters('subnetRef')]"
+                            }
+                        }
+                    }
+                ],
+                "networkSecurityGroup": {
+                    "id": "[resourceId(parameters('NSGResourceGroup'),'Microsoft.Network/networkSecurityGroups', parameters('NSGName'))]"
+                }
+            }
+        }
+    ]
+}
