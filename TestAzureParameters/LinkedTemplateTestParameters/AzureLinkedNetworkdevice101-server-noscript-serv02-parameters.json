@@ -49,6 +49,12 @@
         },
         "IPAllocationMethod": {
             "value": "Dynamic"
+        },
+        "scriptName":{
+            "value": "basicconfig.sh"
+        },
+        "scriptParameters":{
+            "value": ""
         }
     }
 }

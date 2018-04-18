@@ -6,7 +6,7 @@
             "value": "uksouth"
         },
         "virtualMachineNameSuffix": {
-            "value": "linkedtest-serv001"
+            "value": "newtest"
         },
         "virtualMachineSize": {
             "value": "Standard_A1_v2"
@@ -49,6 +49,12 @@
         },
         "IPAllocationMethod": {
             "value": "Dynamic"
+        },
+        "scriptName":{
+            "value": "basicconfig.sh"
+        },
+        "scriptParameters":{
+            "value": ""
         }
     }
 }

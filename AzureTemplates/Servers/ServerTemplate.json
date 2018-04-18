@@ -1,0 +1,192 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string"
+        },
+        "environment":{
+            "type": "string"
+        },
+        "virtualMachineNameSuffix": {
+            "type": "string"
+        },
+        "virtualMachineSize": {
+            "type": "string"
+        },
+        "adminUsername": {
+            "type": "string"
+        },
+        "virtualNetworkName": {
+            "type": "string"
+        },
+        "networkInterfaceNameSuffix": {
+            "type": "string"
+        },
+        "networkSecurityGroupName": {
+            "type": "string"
+        },
+        "networkSecurityGroupResourceGroup": {
+            "type": "string"
+        }, 
+        "adminPublicKey": {
+            "type": "string"
+        },
+        "subnetName": {
+            "type": "string"
+        },
+        "imageResourceGroup":{
+            "type": "string"
+        },
+        "centosImageName": {
+            "type": "string"
+        },
+        "WorkSpaceName": {
+            "type": "string",
+            "defaultValue": "templating-oms-test"
+        },
+        "WorkSpaceResourceGroup": {
+            "type": "string",
+            "defaultValue": "templating-oms-test"
+        },
+        "NetworkInterfaceType":{
+            "allowedValues": [
+                "Public",
+                "Private"
+            ],
+            "type": "string"
+        },
+        "IPAllocationMethod":{
+            "type": "string"
+        }
+    },
+    "variables": {
+        "vnetId": "[resourceId('BadgerEdgeNW','Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+        "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
+        "randomPrefix": "[toLower(uniqueString(resourceGroup().id))]",        
+        "networkInterfaceName" : "[concat(variables('randomPrefix'), '-ni-' ,parameters('virtualMachineNameSuffix'))]",
+        "networkTemplateDeploymentName": "[concat(variables('networkInterfaceName'), '-NetworkTemplate')]",
+        "virtualMachineName" : "[concat(variables('randomPrefix'), '-' ,parameters('virtualMachineNameSuffix'))]", 
+        "centosImageID" : "[resourceId(parameters('imageResourceGroup'), 'Microsoft.Compute/images', parameters('centosImageName'))]",
+        "workspaceResourceId" : "[resourceId(parameters('WorkSpaceResourceGroup'), 'Microsoft.OperationalInsights/workspaces/', parameters('WorkSpaceName'))]",
+        "gitHubRoot" : "https://raw.githubusercontent.com/sta-travel/public-scripts/master"
+    },
+    "resources": [
+        {
+            "name": "[variables('virtualMachineName')]",
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2016-04-30-preview",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[variables('networkTemplateDeploymentName')]"
+            ],
+            "properties": {
+                "osProfile": {
+                    "computerName": "[variables('virtualMachineName')]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": "true",
+                        "ssh": {
+                            "publicKeys": [
+                                {
+                                    "path": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
+                                    "keyData": "[parameters('adminPublicKey')]"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "hardwareProfile": {
+                    "vmSize": "[parameters('virtualMachineSize')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "id": "[variables('centosImageID')]"
+                    },
+                    "osDisk": {
+                        "createOption": "FromImage",
+                        "managedDisk": {
+                            "storageAccountType": "Standard_LRS"
+                        }
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('networkInterfaceName'), '-', parameters('NetworkInterfaceType')))]"
+                        }
+                    ]
+                }
+            },
+            "resources": [                
+                {
+                    "type": "extensions",
+                    "name": "CustomScriptExtension",
+                    "apiVersion": "2016-04-30-preview",
+                    "location": "[parameters('location')]",
+                    "dependsOn": [
+                        "[variables('virtualMachineName')]"
+                    ],
+                    "properties": {
+                        "publisher": "Microsoft.OSTCExtensions",
+                        "type": "CustomScriptForLinux",
+                        "typeHandlerVersion": "1.5",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "fileUris" : [
+                                "[concat(variables('gitHubRoot'), '/LinuxBuildScripts/' ,parameters('scriptName'))]"
+                            ],
+                            "commandToExecute": "[concat('/bin/bash ',  '.', parameters('scriptName'), ' ', parameters('scriptParameters'))]"
+                            }
+                    }
+                },
+                {
+                    "type": "extensions",
+                    "name": "OMSExtension",
+                    "apiVersion": "2016-04-30-preview",
+                    "location": "[parameters('location')]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Compute/virtualMachines/', variables('virtualMachineName'))]"
+                    ],
+                    "properties": {
+                      "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+                      "type": "OmsAgentForLinux",
+                      "typeHandlerVersion": "1.4",
+                      "settings": {
+                        "workspaceId": "[reference(variables('workspaceResourceId'), '2015-11-01-preview').customerId]"
+                      },
+                      "protectedSettings": {
+                        "workspaceKey": "[listKeys(variables('workspaceResourceId'), '2015-11-01-preview').primarySharedKey]"
+                      }
+                    }
+                  }                             
+            ]
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "[variables('networkTemplateDeploymentName')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode":"Incremental",
+                "templateLink" : {
+                    "uri": "[concat(variables('gitHubRoot'), '/AzureTemplates/Modules/NetworkDevice.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters":{
+                    "NetworkInterfaceType":{"value": "[parameters('NetworkInterfaceType')]"},
+                    "NICName": {"value": "[variables('networkInterfaceName')]"},
+                    "IPAllocationMethod": {"value": "[parameters('IPAllocationMethod')]"},
+                    "subnetRef": {"value": "[variables('subnetRef')]"},
+                    "NSGResourceGroup": {"value": "[parameters('networkSecurityGroupResourceGroup')]"},
+                    "NSGName": {"value": "[parameters('networkSecurityGroupName')]"}
+                }
+            }                        
+        }               
+    ],
+    "outputs": {
+        "adminUsername": {
+            "type": "string",
+            "value": "[parameters('adminUsername')]"
+        }
+    }
+}
