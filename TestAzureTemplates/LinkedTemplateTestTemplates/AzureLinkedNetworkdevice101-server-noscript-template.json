@@ -48,8 +48,8 @@
         },
         "NetworkInterfaceType":{
             "allowedValues": [
-                "public",
-                "private"
+                "Public",
+                "Private"
             ],
             "type": "string"
         },

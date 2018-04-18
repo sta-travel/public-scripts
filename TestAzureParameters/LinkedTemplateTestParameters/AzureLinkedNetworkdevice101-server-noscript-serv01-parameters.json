@@ -45,7 +45,7 @@
             "value": "templating-oms-test"
         },
         "NetworkInterfaceType":{
-            "value": "private"
+            "value": "Private"
         },
         "IPAllocationMethod": {
             "value": "Dynamic"
