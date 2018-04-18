@@ -142,11 +142,11 @@
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode":"Incremental",
-                "templateLink"{
+                "templateLink" : {
                     "uri": "https://raw.githubusercontent.com/sta-travel/public-scripts/master/AzureTemplates/Modules/NetworkDevice.json",
                     "contentVersion": "1.0.0.0"
                 },
-                "parameters"{
+                "parameters":{
                     "NetworkInterfaceType":"[parameters('NetworkInterfaceType')]",
                     "NICName": "[variables('networkInterfaceName')]",
                     "IPAllocationMethod": "[parameters('IPAllocationMethod')]",
