@@ -44,7 +44,7 @@
             "apiVersion": "2017-06-01",
             "condition": "[equals(parameters('NetworkInterfaceType'),'Public')]",
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "[parameters('NICName')]",
+            "name": "[Concat(parameters('NICName'), '-Public')]",
             "location": "[resourceGroup().location]",
             "tags": {
                 "displayName": "parameters('NICName')"
@@ -76,7 +76,7 @@
             "apiVersion": "2017-06-01",
             "condition": "[equals(parameters('NetworkInterfaceType'),'Private')]",
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "[parameters('NICName')]",
+            "name": "[Concat(parameters('NICName'), '-Private')]",
             "location": "[resourceGroup().location]",
             "tags": {
                 "displayName": "parameters('NICName')"
