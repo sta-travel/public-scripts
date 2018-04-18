@@ -152,7 +152,7 @@
                     "IPAllocationMethod": "[parameters('IPAllocationMethod')]",
                     "subnetRef": "[variables('subnetRef')]",
                     "NSGResourceGroup": "[parameters('networkSecurityGroupResourceGroup')]",
-                    "NSGName": "[parameters('STAAZNonProdAppSub-nsg')]"
+                    "NSGName": "[parameters('networkSecurityGroupName')]"
                 }
             }                        
         }               
