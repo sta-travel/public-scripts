@@ -5,7 +5,7 @@
         "location": {
             "value": "uksouth"
         },
-        "environment":{
+        "environment": {
             "value": "ALPHA"
         },
         "virtualMachineNameSuffix": {
