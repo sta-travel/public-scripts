@@ -49,6 +49,13 @@ case $FirewallProfile in
   firewall-cmd --zone=public --add-port=6601/tcp --permanent
   firewall-cmd --reload
   ;;
+  tdpbifa)
+  firewall-cmd --zone=public --add-port=8080/tcp --permanent
+  firewall-cmd --zone=public --add-port=9090/tcp --permanent
+  firewall-cmd --zone=public --add-port=6702/tcp --permanent
+  firewall-cmd --zone=public --add-port=6601/tcp --permanent
+  firewall-cmd --reload
+  ;;
   uiserver)
   ;;
   *)

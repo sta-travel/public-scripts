@@ -2,13 +2,10 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "location": {
-            "type": "string"
-        },
         "environment": {
             "type": "string"
         },
-        "virtualMachineNameSuffix": {
+        "serverRole":{
             "type": "string"
         },
         "virtualMachineSize": {
@@ -42,12 +39,10 @@
             "type": "string"
         },
         "WorkSpaceName": {
-            "type": "string",
-            "defaultValue": "templating-oms-test"
+            "type": "string"
         },
         "WorkSpaceResourceGroup": {
-            "type": "string",
-            "defaultValue": "templating-oms-test"
+            "type": "string"
         },
         "NetworkInterfaceType":{
             "allowedValues": [
@@ -72,7 +67,7 @@
         "randomPrefix": "[toLower(uniqueString(resourceGroup().id))]",        
         "networkInterfaceName" : "[concat(variables('randomPrefix'), '-ni-' ,parameters('virtualMachineNameSuffix'))]",
         "networkTemplateDeploymentName": "[concat(variables('networkInterfaceName'), '-NetworkTemplate')]",
-        "virtualMachineName" : "[concat(variables('randomPrefix'), '-' ,parameters('virtualMachineNameSuffix'))]", 
+        "virtualMachineName" : "[concat(variables('randomPrefix'), parameters('environment'), '-' , parameters('serverRole'))]", 
         "centosImageID" : "[resourceId(parameters('imageResourceGroup'), 'Microsoft.Compute/images', parameters('centosImageName'))]",
         "workspaceResourceId" : "[resourceId(parameters('WorkSpaceResourceGroup'), 'Microsoft.OperationalInsights/workspaces/', parameters('WorkSpaceName'))]",
         "gitHubRoot" : "https://raw.githubusercontent.com/sta-travel/public-scripts/master"
@@ -82,7 +77,7 @@
             "name": "[variables('virtualMachineName')]",
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2016-04-30-preview",
-            "location": "[parameters('location')]",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[variables('networkTemplateDeploymentName')]"
             ],
@@ -129,7 +124,7 @@
                     "type": "extensions",
                     "name": "CustomScriptExtension",
                     "apiVersion": "2016-04-30-preview",
-                    "location": "[parameters('location')]",
+                    "location": "[resourceGroup().location]",
                     "dependsOn": [
                         "[variables('virtualMachineName')]"
                     ],
@@ -150,7 +145,7 @@
                     "type": "extensions",
                     "name": "OMSExtension",
                     "apiVersion": "2016-04-30-preview",
-                    "location": "[parameters('location')]",
+                    "location": "[resourceGroup().location]",
                     "dependsOn": [
                         "[concat('Microsoft.Compute/virtualMachines/', variables('virtualMachineName'))]"
                     ],
