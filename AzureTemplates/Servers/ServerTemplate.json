@@ -17,9 +17,6 @@
         "virtualNetworkName": {
             "type": "string"
         },
-        "networkInterfaceNameSuffix": {
-            "type": "string"
-        },
         "networkSecurityGroupName": {
             "type": "string"
         },
