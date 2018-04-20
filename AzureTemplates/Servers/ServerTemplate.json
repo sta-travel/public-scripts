@@ -62,7 +62,7 @@
         "vnetId": "[resourceId('BadgerEdgeNW','Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
         "randomPrefix": "[toLower(uniqueString(resourceGroup().id))]",        
-        "networkInterfaceName" : "[concat(variables('randomPrefix'), '-ni-' ,parameters('virtualMachineNameSuffix'))]",
+        "networkInterfaceName" : "[concat(variables('randomPrefix'), '-ni-' , parameters('environment'), '-' , parameters('serverRole'))]",
         "networkTemplateDeploymentName": "[concat(variables('networkInterfaceName'), '-NetworkTemplate')]",
         "virtualMachineName" : "[concat(variables('randomPrefix'), parameters('environment'), '-' , parameters('serverRole'))]", 
         "centosImageID" : "[resourceId(parameters('imageResourceGroup'), 'Microsoft.Compute/images', parameters('centosImageName'))]",
