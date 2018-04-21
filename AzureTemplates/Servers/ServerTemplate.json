@@ -17,16 +17,15 @@
         "virtualNetworkName": {
             "type": "string"
         },
-        "networkSecurityGroupName": {
-            "type": "string"
+        "networkTier": {
+            "type": "string",
+            "allowedValues": [
+                "ui",
+                "app",
+                "data"
+            ]
         },
-        "networkSecurityGroupResourceGroup": {
-            "type": "string"
-        }, 
         "adminPublicKey": {
-            "type": "string"
-        },
-        "subnetName": {
             "type": "string"
         },
         "imageResourceGroup":{
@@ -59,8 +58,27 @@
         }
     },
     "variables": {
+        "networkSettings":{
+          "ui" : {
+              "subnetName": "STAAZNonProdWebSub",
+              "networkSecurityGroup": "STAAZNonProdWebNSG",
+              "networkSecrutiyResourceGroup": "STAAZNonProdWeb"
+          },
+          "app": {
+              "subnetName": "STAAZNonProdWebSub",
+              "networkSecurityGroup": "STAAZNonProdAppSub-nsg",
+              "networkSecrutiyResourceGroup": "STAAZNonProdAppSub"
+          },
+          "data": {
+              "subnetName": "STAAZNonProdWebSub",
+              "networkSecurityGroup": "STAAZNonProdDataNSG",
+              "networkSecrutiyResourceGroup": "STAAZNonProdDataSub"
+          }
+        },
         "vnetId": "[resourceId('BadgerEdgeNW','Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-        "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
+        "subnetRef": "[concat(variables('vnetId'), '/subnets/', variables('networkSettings')[parameters('networkTier')].subnetName )]",
+        "networkSecurityGroup": "[variables('networkSettings')[parameters('networkTier')].networkSecurityGroup )]",
+        "networkSecrutiyResourceGroup": "[variables('networkSettings')[parameters('networkTier')].networkSecrutiyResourceGroup )]",
         "randomPrefix": "[toLower(uniqueString(resourceGroup().id))]",        
         "networkInterfaceName" : "[concat(variables('randomPrefix'), '-ni-' , parameters('environment'), '-' , parameters('serverRole'))]",
         "networkTemplateDeploymentName": "[concat(variables('networkInterfaceName'), '-NetworkTemplate')]",
@@ -68,6 +86,7 @@
         "centosImageID" : "[resourceId(parameters('imageResourceGroup'), 'Microsoft.Compute/images', parameters('centosImageName'))]",
         "workspaceResourceId" : "[resourceId(parameters('WorkSpaceResourceGroup'), 'Microsoft.OperationalInsights/workspaces/', parameters('WorkSpaceName'))]",
         "gitHubRoot" : "https://raw.githubusercontent.com/sta-travel/public-scripts/master"
+        
     },
     "resources": [
         {
@@ -175,8 +194,8 @@
                     "NICName": {"value": "[variables('networkInterfaceName')]"},
                     "IPAllocationMethod": {"value": "[parameters('IPAllocationMethod')]"},
                     "subnetRef": {"value": "[variables('subnetRef')]"},
-                    "NSGResourceGroup": {"value": "[parameters('networkSecurityGroupResourceGroup')]"},
-                    "NSGName": {"value": "[parameters('networkSecurityGroupName')]"}
+                    "NSGResourceGroup": {"value": "[variables('networkSecurityGroupResourceGroup')]"},
+                    "NSGName": {"value": "[variables('networkSecurityGroupName')]"}
                 }
             }                        
         }               
