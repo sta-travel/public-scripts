@@ -62,17 +62,17 @@
           "ui" : {
               "subnetName": "STAAZNonProdWebSub",
               "networkSecurityGroup": "STAAZNonProdWebNSG",
-              "networkSecrutiyResourceGroup": "STAAZNonProdWeb"
+              "networkSecurityResourceGroup": "STAAZNonProdWeb"
           },
           "app": {
               "subnetName": "STAAZNonProdWebSub",
               "networkSecurityGroup": "STAAZNonProdAppSub-nsg",
-              "networkSecrutiyResourceGroup": "STAAZNonProdAppSub"
+              "networkSecurityResourceGroup": "STAAZNonProdAppSub"
           },
           "data": {
               "subnetName": "STAAZNonProdWebSub",
               "networkSecurityGroup": "STAAZNonProdDataNSG",
-              "networkSecrutiyResourceGroup": "STAAZNonProdDataSub"
+              "networkSecurityResourceGroup": "STAAZNonProdDataSub"
           }
         },
         "vnetId": "[resourceId('BadgerEdgeNW','Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
