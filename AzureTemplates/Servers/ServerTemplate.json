@@ -195,7 +195,7 @@
                     "IPAllocationMethod": {"value": "[parameters('IPAllocationMethod')]"},
                     "subnetRef": {"value": "[variables('subnetRef')]"},
                     "NSGResourceGroup": {"value": "[variables('networkSecurityResourceGroup')]"},
-                    "NSGName": {"value": "[variables('networkSecurityGroupName')]"}
+                    "NSGName": {"value": "[variables('networkSecurityGroup')]"}
                 }
             }                        
         }               
