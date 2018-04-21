@@ -76,9 +76,9 @@
           }
         },
         "vnetId": "[resourceId('BadgerEdgeNW','Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-        "subnetRef": "[concat(variables('vnetId'), '/subnets/', variables('networkSettings')[parameters('networkTier')].subnetName )]",
-        "networkSecurityGroup": "[variables('networkSettings')[parameters('networkTier')].networkSecurityGroup )]",
-        "networkSecrutiyResourceGroup": "[variables('networkSettings')[parameters('networkTier')].networkSecrutiyResourceGroup )]",
+        "subnetRef": "[concat(variables('vnetId'), '/subnets/', variables('networkSettings')[parameters('networkTier')].subnetName)]",
+        "networkSecurityGroup": "[variables('networkSettings')[parameters('networkTier')].networkSecurityGroup]",
+        "networkSecrutiyResourceGroup": "[variables('networkSettings')[parameters('networkTier')].networkSecrutiyResourceGroup]",
         "randomPrefix": "[toLower(uniqueString(resourceGroup().id))]",        
         "networkInterfaceName" : "[concat(variables('randomPrefix'), '-ni-' , parameters('environment'), '-' , parameters('serverRole'))]",
         "networkTemplateDeploymentName": "[concat(variables('networkInterfaceName'), '-NetworkTemplate')]",
