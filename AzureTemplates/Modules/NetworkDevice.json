@@ -67,6 +67,16 @@
                         }
                     }
                 ],
+                "dnsSettings": {
+                    "dnsServers": [
+                        "10.37.1.5",
+                        "10.5.1.40"
+                    ],
+                    "appliedDnsServers": [
+                        "10.37.1.5",
+                        "10.5.1.40"
+                    ]                    
+                },
                 "networkSecurityGroup": {
                     "id": "[resourceId(parameters('NSGResourceGroup'),'Microsoft.Network/networkSecurityGroups', parameters('NSGName'))]"
                 }
@@ -94,6 +104,16 @@
                         }
                     }
                 ],
+                "dnsSettings": {
+                    "dnsServers": [
+                        "10.37.1.5",
+                        "10.5.1.40"
+                    ],
+                    "appliedDnsServers": [
+                        "10.37.1.5",
+                        "10.5.1.40"
+                    ]                    
+                },
                 "networkSecurityGroup": {
                     "id": "[resourceId(parameters('NSGResourceGroup'),'Microsoft.Network/networkSecurityGroups', parameters('NSGName'))]"
                 }
