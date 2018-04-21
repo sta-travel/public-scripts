@@ -78,7 +78,7 @@
         "vnetId": "[resourceId('BadgerEdgeNW','Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', variables('networkSettings')[parameters('networkTier')].subnetName)]",
         "networkSecurityGroup": "[variables('networkSettings')[parameters('networkTier')].networkSecurityGroup]",
-        "networkSecrutiyResourceGroup": "[variables('networkSettings')[parameters('networkTier')].networkSecrutiyResourceGroup]",
+        "networkSecurityResourceGroup": "[variables('networkSettings')[parameters('networkTier')].networkSecurityResourceGroup]",
         "randomPrefix": "[toLower(uniqueString(resourceGroup().id))]",        
         "networkInterfaceName" : "[concat(variables('randomPrefix'), '-ni-' , parameters('environment'), '-' , parameters('serverRole'))]",
         "networkTemplateDeploymentName": "[concat(variables('networkInterfaceName'), '-NetworkTemplate')]",
@@ -194,7 +194,7 @@
                     "NICName": {"value": "[variables('networkInterfaceName')]"},
                     "IPAllocationMethod": {"value": "[parameters('IPAllocationMethod')]"},
                     "subnetRef": {"value": "[variables('subnetRef')]"},
-                    "NSGResourceGroup": {"value": "[variables('networkSecurityGroupResourceGroup')]"},
+                    "NSGResourceGroup": {"value": "[variables('networkSecurityResourceGroup')]"},
                     "NSGName": {"value": "[variables('networkSecurityGroupName')]"}
                 }
             }                        
