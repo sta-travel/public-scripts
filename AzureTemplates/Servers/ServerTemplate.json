@@ -31,7 +31,7 @@
         "imageResourceGroup":{
             "type": "string"
         },
-        "centosImageName": {
+        "imageName": {
             "type": "string"
         },
         "WorkSpaceName": {
@@ -83,7 +83,7 @@
         "networkInterfaceName" : "[concat(variables('randomPrefix'), '-ni-' , parameters('environment'), '-' , parameters('serverRole'))]",
         "networkTemplateDeploymentName": "[concat(variables('networkInterfaceName'), '-NetworkTemplate')]",
         "virtualMachineName" : "[concat(variables('randomPrefix'), parameters('environment'), '-' , parameters('serverRole'))]", 
-        "centosImageID" : "[resourceId(parameters('imageResourceGroup'), 'Microsoft.Compute/images', parameters('centosImageName'))]",
+        "imageID" : "[resourceId(parameters('imageResourceGroup'), 'Microsoft.Compute/images', parameters('imageName'))]",
         "workspaceResourceId" : "[resourceId(parameters('WorkSpaceResourceGroup'), 'Microsoft.OperationalInsights/workspaces/', parameters('WorkSpaceName'))]",
         "gitHubRoot" : "https://raw.githubusercontent.com/sta-travel/public-scripts/master"
         
@@ -118,7 +118,7 @@
                 },
                 "storageProfile": {
                     "imageReference": {
-                        "id": "[variables('centosImageID')]"
+                        "id": "[variables('imageID')]"
                     },
                     "osDisk": {
                         "createOption": "FromImage",
