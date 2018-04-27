@@ -201,9 +201,13 @@
         }               
     ],
     "outputs": {
-        "adminUsername": {
-            "type": "string",
-            "value": "[parameters('adminUsername')]"
-        }
+        "outputNetworkDetails": {
+            "value": {"value": "[reference('variables('networkTemplateDeploymentName').outputs.outputNetworkDetails.value)]"},
+            "type": "string"
+        },
+        "outputServerNameDetails": {
+            "value": "[variables('virtualMachineName')]",
+            "type": "string"
+        }  
     }
 }

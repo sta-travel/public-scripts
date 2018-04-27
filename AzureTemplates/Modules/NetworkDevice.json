@@ -119,5 +119,11 @@
                 }
             }
         }
-    ]
+    ],
+    "outputs": {
+        "outputNetworkDetails": {
+            "value": "[reference(parameters('NICName'), '-', parameters('NetworkInterfaceType').ipConfigurations[0].properties.privateIPAddress]",
+            "type": "string"
+        }        
+    }
 }
