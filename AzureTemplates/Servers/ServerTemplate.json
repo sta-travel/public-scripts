@@ -202,7 +202,7 @@
     ],
     "outputs": {
         "outputNetworkDetails": {
-            "value": {"value": "[reference('variables('networkTemplateDeploymentName').outputs.outputNetworkDetails.value)]"},
+            "value": {"value": "[reference(variables('networkTemplateDeploymentName')).outputs.outputNetworkDetails.value]"},
             "type": "string"
         },
         "outputServerNameDetails": {
